@@ -2,6 +2,8 @@ class CLIRouter
 
   attr_reader :weather_forecast, :commands
 
+  APPROVED_COMMANDS = ["help","today","tomorrow","weekend"]
+
   def initialize(commands)
     @commands = commands # in fact this is ARGV
 
@@ -49,13 +51,12 @@ class CLIRouter
   end
 
   def parse_commands
-    if commands.length == 1
-      if weather_forecast.respond_to?(commands[0].to_sym)
-        collect_weather_data
-        puts weather_forecast.send(self.commands[0])
-      else
-        puts "Sorry, not sure what you're asking for, please enter 'forecast help' to learn more."
-      end
+    #binding.pry
+    if commands.length == 1 && APPROVED_COMMANDS.include?(commands[0])
+      collect_weather_data
+      puts weather_forecast.send(self.commands[0])
+    else
+      puts "Sorry, not sure what you're asking for, please enter 'forecast help' to learn more."
     end
   end
 
