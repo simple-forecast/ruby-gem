@@ -4,6 +4,17 @@ class CLIRouter
 
   def initialize(commands)
     @commands = commands # in fact this is ARGV
+
+    if commands.length == 0
+      puts "Please enter something like 'forecast tomorrow' or enter 'forecast help' to learn more."
+    elsif commands.include?("help")
+      help
+    else
+      parse_commands
+    end
+  end
+ 
+  def collect_weather_data
     get_user_location
     set_forecast_location
     wd = WeatherData.new(@forecast_location.first, @forecast_location.last)
@@ -12,8 +23,6 @@ class CLIRouter
 
   def get_user_location
     @longitude_latitude = Geocoder.coordinates(open('http://whatismyip.akamai.com').read)
-    # @latitude = longitude_latitude[0]
-    # @longitude = longitude_latitude[1]
   end
 
   def set_forecast_location
@@ -27,19 +36,26 @@ class CLIRouter
     # TODO: rewrite with more detailed help block
     #puts weather_forecast.today
     #puts weather_forecast.separator
-    puts "Try something like 'forecast tomorrow'"
+    puts <<-TEXT
+
+    Thanks for using Simple Forecast. Currently, the following commands are supported:
+
+    help        Displays help (what you're viewing now)
+    today       Today's forecast (compared to yesterday)
+    tomorrow    Tomorrow's forecast (compared to today)
+    weekend     Average temperature for this weekend (compared to today) 
+
+    TEXT
   end
 
   def parse_commands
-    # slot 1 is first command after 'forecast'
     if commands.length == 1
-      puts weather_forecast.send(self.commands[0])
-    elsif commands.length == 2
-      weather_forecast.compare_loc = commands[1]
-      puts "I'm comparing against #{weather_forecast.compare_loc}"
-      puts weather_forecast.send(self.commands[0])
-    elsif commands.length == 0
-      help
+      if weather_forecast.respond_to?(commands[0].to_sym)
+        collect_weather_data
+        puts weather_forecast.send(self.commands[0])
+      else
+        puts "Sorry, not sure what you're asking for, please enter 'forecast help' to learn more."
+      end
     end
   end
 

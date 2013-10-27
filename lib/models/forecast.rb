@@ -9,34 +9,25 @@ class Forecast
   end
 
   def today
-    puts "gathering additional data"
     @yesterday_temp = self.weather_data.yesterday_temp
     separator + 
-    "temp: #{compare(today_temp, yesterday_temp)}yesterday\n#{self.weather_data.today_summary}"
+    "#{compare(today_temp, yesterday_temp)}yesterday, #{self.weather_data.today_summary}"
   end
 
   def tomorrow
     separator +
-    "temp: #{compare(tomorrow_temp, today_temp)}today\n#{self.weather_data.tomorrow_summary}"
+    "#{compare(tomorrow_temp, today_temp)}today, #{self.weather_data.tomorrow_summary}"
   end
 
   def weekend
     separator +
+    "this weekend will be " + 
     compare(avg_temp_this_weekend, today_temp) + "today"
   end
 
   def next_week
-    separator
     # TODO: compare(this_week_avg, today)
   end
-
-  # def this_weekend
-  #   puts weather_data.this_weekend
-  # end
-
-  # def next_week
-  #   puts weather_data.next_week
-  # end
   
   def avg_temp_this_weekend
     data = find_weekend_data
@@ -83,7 +74,7 @@ class Forecast
     end
 
     if temp1 == temp2
-      "pretty much the same as "
+      "about the same as "
     elsif temp1 < temp2
       mod + "colder than "
     else
@@ -92,7 +83,7 @@ class Forecast
   end
 
   def separator
-    "------------------\n"
+    "\n"
   end
 
 end

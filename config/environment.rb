@@ -1,6 +1,5 @@
 require 'forecast_io'
 require 'geocoder'
-require 'chronic'
 require 'open-uri'
 
 # TODO: set this gem to only be used in dev
