@@ -2,14 +2,14 @@ class CLIRouter
 
   attr_reader :weather_forecast, :commands
 
-  APPROVED_COMMANDS = ["help","today","tomorrow","weekend", "tonight", "tomorrow_night"]
+  APPROVED_COMMANDS = ["help", "today","tomorrow","weekend", "tonight", "tomorrow_night"]
 
   def initialize(commands)
     @commands = commands # in fact this is ARGV
 
     if commands.length == 0
       puts "Please enter something like 'forecast tomorrow' or enter 'forecast help' to learn more."
-    elsif commands.include?("help")
+    elsif commands.include?("help") || commands.include?("-h")
       help
     else
       parse_commands
