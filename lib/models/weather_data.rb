@@ -1,6 +1,5 @@
 class WeatherData
 
-1383537600
   attr_accessor :yesterday_data, :today_data, :lat, :long
 
   NYC = [40.714623, -74.006605]
@@ -70,7 +69,6 @@ class WeatherData
       start = 24
     end
 
-    self.today_data["hourly"]["data"][start..-1].each do |hour_entry|
       return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
     end
   end
