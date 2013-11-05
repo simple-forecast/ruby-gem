@@ -1,5 +1,6 @@
 class WeatherData
 
+1383537600
   attr_accessor :yesterday_data, :today_data, :lat, :long
 
   NYC = [40.714623, -74.006605]
@@ -12,6 +13,16 @@ class WeatherData
     print '.'
     @today_data = ForecastIO.forecast(self.lat, self.long) 
     # when you don't specify a time in the ForecastIO call, you can get the daily high temps
+  end
+
+  def last_night_temp
+    print '.'
+    @yesterday_data = ForecastIO.forecast(self.lat, self.long, time: time_yesterday)
+    temp_10_pm("yesterday")
+  end
+
+  def temp_10_pm(day)
+    self.send("#{day}_data")["hourly"]["data"][23]["temperature"]
   end
 
   def yesterday_temp
