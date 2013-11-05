@@ -2,14 +2,14 @@ class CLIRouter
 
   attr_reader :weather_forecast, :commands
 
-  APPROVED_COMMANDS = ["help","today","tomorrow","weekend"]
+  APPROVED_COMMANDS = ["help", "today","tomorrow","weekend", "tonight", "tomorrow_night"]
 
   def initialize(commands)
     @commands = commands # in fact this is ARGV
 
     if commands.length == 0
       puts "Please enter something like 'forecast tomorrow' or enter 'forecast help' to learn more."
-    elsif commands.include?("help")
+    elsif commands.include?("help") || commands.include?("-h")
       help
     else
       parse_commands
@@ -42,10 +42,12 @@ class CLIRouter
 
     Thanks for using Simple Forecast. Currently, the following commands are supported:
 
-    help        Displays help (what you're viewing now)
-    today       Today's forecast (compared to yesterday)
-    tomorrow    Tomorrow's forecast (compared to today)
-    weekend     Average temperature for this weekend (compared to today) 
+    help             Displays help (what you're viewing now)
+    today            Today's forecast (compared to yesterday)
+    tonight          Tonight's forecast (10pm compared to 10pm last night)
+    tomorrow         Tomorrow's forecast (compared to today)
+    tomorrow_night   Tomorrow night's forecast (compared to 10pm tonight)
+    weekend          Average temperature for this weekend (compared to today) 
 
     TEXT
   end
