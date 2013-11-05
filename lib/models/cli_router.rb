@@ -2,7 +2,7 @@ class CLIRouter
 
   attr_reader :weather_forecast, :commands
 
-  APPROVED_COMMANDS = ["help","today","tomorrow","weekend", "tonight"]
+  APPROVED_COMMANDS = ["help","today","tomorrow","weekend", "tonight", "tomorrow_night"]
 
   def initialize(commands)
     @commands = commands # in fact this is ARGV
@@ -46,6 +46,7 @@ class CLIRouter
     today       Today's forecast (compared to yesterday)
     tonight     Tonight's forecast (10pm compared to 10pm last night)
     tomorrow    Tomorrow's forecast (compared to today)
+    tomorrow_night   Tomorrow night's forecast (compared to 10pm tonight)
     weekend     Average temperature for this weekend (compared to today) 
 
     TEXT

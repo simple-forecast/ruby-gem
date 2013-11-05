@@ -15,20 +15,23 @@ class WeatherData
     # when you don't specify a time in the ForecastIO call, you can get the daily high temps
   end
 
-  def last_night_temp
-    print '.'
-    @yesterday_data = ForecastIO.forecast(self.lat, self.long, time: time_yesterday)
-    temp_10_pm("yesterday")
-  end
-
-  def temp_10_pm(day)
-    self.send("#{day}_data")["hourly"]["data"][23]["temperature"]
-  end
-
   def yesterday_temp
     print '.'
     @yesterday_data = ForecastIO.forecast(self.lat, self.long, time: time_yesterday)
     self.yesterday_data["daily"]["data"].first["temperatureMax"]
+  end
+
+  def last_night_temp
+    print '.'
+    @yesterday_data = ForecastIO.forecast(self.lat, self.long, time: time_yesterday)
+    yesterday_temp_10_pm
+  end
+
+  def yesterday_temp_10_pm
+    self.yesterday_data["hourly"]["data"].each do |hour_entry|
+      puts "found 10pm yesterday at: #{hour_entry}" if Time.at(hour_entry["time"]).hour == 22
+      return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
+    end
   end
 
   def today_temp
@@ -39,12 +42,42 @@ class WeatherData
     self.today_data["daily"]["data"][0]["summary"].downcase.gsub(/\./,'')
   end
 
+
+  def tonight_temp
+    today_temp_10_pm
+  end
+
+  def today_temp_10_pm
+    if Time.now.hour >= 22
+      puts "current temp at #{Time.now}: #{self.today_data['currently']}"
+      return self.today_data["currently"]["temperature"]
+    end
+    self.today_data["hourly"]["data"].each do |hour_entry|
+      puts "found 10pm at: #{hour_entry}" if Time.at(hour_entry["time"]).hour == 22
+
+      return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
+    end
+  end
+
   def tomorrow_temp
     self.today_data["daily"]["data"][1]["temperatureMax"]
   end
 
   def tomorrow_summary
     self.today_data["daily"]["data"][1]["summary"].downcase.gsub(/\./,'')
+  end
+
+  def tomorrow_night_temp
+    if Time.now.hour >= 22
+      start = 0
+    else
+      start = 24
+    end
+
+    self.today_data["hourly"]["data"][start..-1].each do |hour_entry|
+      puts "found 10pm tomorrow at: #{hour_entry}" if Time.at(hour_entry["time"]).hour == 22
+      return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
+    end
   end
 
   def time_yesterday

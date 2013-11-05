@@ -1,12 +1,14 @@
+require 'pry'
 class Forecast
 
-  attr_accessor :today_temp, :tonight_temp, :yesterday_temp, :last_night_temp, :tomorrow_temp, :weather_data, :compare_loc
+  attr_accessor :today_temp, :tonight_temp, :yesterday_temp, :last_night_temp, :tomorrow_temp, :tomorrow_night_temp, :weather_data, :compare_loc
 
   def initialize(weather_data_object)
     @weather_data = weather_data_object
     @today_temp = self.weather_data.today_temp
     @tomorrow_temp = self.weather_data.tomorrow_temp
-    @tonight_temp = self.weather_data.temp_10_pm("today")
+    @tonight_temp = self.weather_data.tonight_temp
+    @tomorrow_night_temp = self.weather_data.tomorrow_night_temp
   end
 
   def today
@@ -15,6 +17,7 @@ class Forecast
     "#{compare(today_temp, yesterday_temp)}yesterday, #{self.weather_data.today_summary}"
   end
 
+  # TODO: should the time-specific forecasts consider the 'apparentTemperature' or the 'temperature'?
   def tonight
     @last_night_temp = self.weather_data.last_night_temp
     separator +
@@ -24,6 +27,11 @@ class Forecast
   def tomorrow
     separator +
     "#{compare(tomorrow_temp, today_temp)}today, #{self.weather_data.tomorrow_summary}"
+  end
+
+  def tomorrow_night
+    separator + 
+    compare(tomorrow_night_temp, tonight_temp) + "tonight"
   end
 
 
