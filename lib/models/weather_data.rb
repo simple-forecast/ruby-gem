@@ -29,7 +29,6 @@ class WeatherData
 
   def yesterday_temp_10_pm
     self.yesterday_data["hourly"]["data"].each do |hour_entry|
-      puts "found 10pm yesterday at: #{hour_entry}" if Time.at(hour_entry["time"]).hour == 22
       return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
     end
   end
@@ -49,12 +48,9 @@ class WeatherData
 
   def today_temp_10_pm
     if Time.now.hour >= 22
-      puts "current temp at #{Time.now}: #{self.today_data['currently']}"
       return self.today_data["currently"]["temperature"]
     end
     self.today_data["hourly"]["data"].each do |hour_entry|
-      puts "found 10pm at: #{hour_entry}" if Time.at(hour_entry["time"]).hour == 22
-
       return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
     end
   end
@@ -75,7 +71,6 @@ class WeatherData
     end
 
     self.today_data["hourly"]["data"][start..-1].each do |hour_entry|
-      puts "found 10pm tomorrow at: #{hour_entry}" if Time.at(hour_entry["time"]).hour == 22
       return hour_entry["temperature"] if Time.at(hour_entry["time"]).hour == 22
     end
   end

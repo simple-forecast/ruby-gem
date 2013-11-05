@@ -1,4 +1,3 @@
-require 'pry'
 class Forecast
 
   attr_accessor :today_temp, :tonight_temp, :yesterday_temp, :last_night_temp, :tomorrow_temp, :tomorrow_night_temp, :weather_data, :compare_loc
